@@ -40,7 +40,7 @@ namespace FinalProject
                     if (!toggle)
                     {
                         toggle = true;
-                        Console.WriteLine("Program stopped, Press P to start again!");
+                        Console.WriteLine("Program stopped, Press P to start!");
                     }
                 }
                 if (dataAvailable == 1)
