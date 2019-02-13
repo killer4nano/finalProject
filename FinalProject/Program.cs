@@ -19,14 +19,30 @@ namespace FinalProject
         {
             int dataAvailable;
             bool data = false;
-
+            bool running = false;
+            bool toggle = false;
             MySqlConnection conn = null;
       
 
             while (true)
             {
-                dataAvailable = readFromTag("dataAvailable");
-
+                dataAvailable = 0;
+                if (Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.P)
+                {
+                    running = !running;
+                }
+                if (running)
+                {
+                    dataAvailable = readFromTag("dataAvailable");
+                    toggle = false;
+                }else
+                {
+                    if (!toggle)
+                    {
+                        toggle = true;
+                        Console.WriteLine("Program stopped, Press P to start again!");
+                    }
+                }
                 if (dataAvailable == 1)
                 {
                     data = false;
@@ -78,7 +94,7 @@ namespace FinalProject
 
 
                 } else {
-                    if (!data)
+                    if (!data && running)
                     {
                         Console.WriteLine("No data available!");
                         data = true;
