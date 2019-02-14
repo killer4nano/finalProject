@@ -98,7 +98,7 @@ namespace FinalProject
                     try
                     {
                         while (orderAvailable != 2) {
-                            orderAvailable = readFromTag("orederAvailable");
+                            orderAvailable = readFromTag("orderAvailable");
                         }
                         conn = new MySqlConnection("server=buildabox.online;user id=faraway;password=killer12;database=finalproject;connection timeout=4;");
                         conn.Open();
@@ -123,13 +123,13 @@ namespace FinalProject
                         {
                             
                         }
-                        writeToTag("ASRS_yDesired", (int)reader["topsPositionR"]);
-                        writeToTag("ASRS_xDesired", (int)reader["topsPositionC"]);
                         Console.WriteLine("Press A to go forward");
                         while (!(Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.A))
                         {
 
                         }
+                        writeToTag("ASRS_yDesired", (int)reader["topsPositionR"]);
+                        writeToTag("ASRS_xDesired", (int)reader["topsPositionC"]);               
                         Console.WriteLine("Going to pickup top!");
                         writeToTag("asrsGrabTop", 2);
                         while (readFromTag("PP_Pickup") == 0)
