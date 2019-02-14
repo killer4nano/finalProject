@@ -9,5 +9,6 @@ C:\Users\kille\source\repos\FinalProject\FinalProject\bin\Debug\LibplctagWrapper
 C:\Users\kille\source\repos\FinalProject\FinalProject\bin\Debug\MySql.Data.xml
 C:\Users\kille\source\repos\FinalProject\FinalProject\obj\Debug\FinalProject.exe
 C:\Users\kille\source\repos\FinalProject\FinalProject\obj\Debug\FinalProject.pdb
-C:\Users\kille\Source\Repos\finalProject\FinalProject\obj\Debug\FinalProject.csprojResolveAssemblyReference.cache
 C:\Users\kille\source\repos\FinalProject\FinalProject\obj\Debug\FinalProject.csprojAssemblyReference.cache
+C:\Users\kille\source\repos\FinalProject\FinalProject\bin\Debug\MySql.Data.dll
+C:\Users\kille\source\repos\FinalProject\FinalProject\obj\Debug\FinalProject.csproj.CopyComplete

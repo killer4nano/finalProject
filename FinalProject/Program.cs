@@ -41,6 +41,7 @@ namespace FinalProject
                     {
                         toggle = true;
                         Console.WriteLine("Program stopped, Press P to starttt !");
+                        data = false;
                     }
                 }
                 if (dataAvailable == 1)
@@ -55,7 +56,7 @@ namespace FinalProject
                     {
                         column = readFromTag("ScurrentTopX");
                         row = readFromTag("ScurrentTopY");
-                    }else
+                    } else
                     {
 
                         column = readFromTag("ScurrentBottomX");
@@ -67,10 +68,10 @@ namespace FinalProject
                     if (colour == 0)
                     {
                         Scolour = "black";
-                    }else if (colour == 1)
+                    } else if (colour == 1)
                     {
                         Scolour = "white";
-                    }else if (colour == 2)
+                    } else if (colour == 2)
                     {
                         Scolour = "silver";
                     }
@@ -85,14 +86,66 @@ namespace FinalProject
                         command.CommandText = "INSERT INTO inventory (rowN,columnN,color, orientation) VALUES (" + row + "," + column + ",'" + Scolour + "'," + isTop + ")";
                         command.ExecuteNonQuery();
                         conn.Close();
-                    }catch(Exception e)
-                    {
+                    } catch (Exception e) {
                         Console.WriteLine(e.Message);
                     }
-                    Console.WriteLine("colour is " + Scolour + " \r\nThe piece is a " + (isTop == 1 ? "Top." : "Bottom.") + "\r\nIn Column: "+ column +"\r\nRow: " +row);
+                    Console.WriteLine("colour is " + Scolour + " \r\nThe piece is a " + (isTop == 1 ? "Top." : "Bottom.") + "\r\nIn Column: " + column + "\r\nRow: " + row);
                     writeToTag("dataReceived", 1);
 
 
+                } else if (dataAvailable == 2) {
+                    int orderAvailable = 0;
+                    try
+                    {
+                        while (orderAvailable != 2) {
+                            orderAvailable = readFromTag("orederAvailable");
+                        }
+                        conn = new MySqlConnection("server=buildabox.online;user id=faraway;password=killer12;database=finalproject;connection timeout=4;");
+                        conn.Open();
+                        Console.WriteLine("Connection Success!");
+                        MySqlCommand command = conn.CreateCommand();
+                        command.CommandText = "select * from orders;";
+                        MySqlDataReader reader = command.ExecuteReader();
+                        reader.Read();
+                        writeToTag("ASRS_yDesired", (int)reader["bottomsPositionR"]);
+                        Console.WriteLine(reader["topsPositionR"]);
+                        writeToTag("ASRS_xDesired", (int)reader["bottomsPositionC"]);
+                        Console.WriteLine(reader["topsPositionC"]);
+                        Console.WriteLine("Press A to go forward");
+                        while (!(Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.A))
+                        {
+                            
+                        }
+                        Console.WriteLine("Going to pickup bottom!");
+                        writeToTag("orderAvailable", 1);
+                        Console.WriteLine("Waiting for part to be dropped off to press...");
+                        while(readFromTag("asrsGrabTop") == 0)
+                        {
+                            
+                        }
+                        writeToTag("ASRS_yDesired", (int)reader["topsPositionR"]);
+                        writeToTag("ASRS_xDesired", (int)reader["topsPositionC"]);
+                        Console.WriteLine("Press A to go forward");
+                        while (!(Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.A))
+                        {
+
+                        }
+                        Console.WriteLine("Going to pickup top!");
+                        writeToTag("asrsGrabTop", 2);
+                        while (readFromTag("PP_Pickup") == 0)
+                        {
+
+                        }
+                        writeToTag("asrsGrabTop", 0);
+                        writeToTag("orderAvailable", 0);
+
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
+
+                    
                 } else {
                     if (!data && running)
                     {
