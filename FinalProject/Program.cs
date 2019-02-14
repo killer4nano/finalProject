@@ -105,8 +105,13 @@ namespace FinalProject
                         Console.WriteLine("Connection Success!");
                         MySqlCommand command = conn.CreateCommand();
                         command.CommandText = "select * from orders;";
-                        MySqlDataReader reader = command.ExecuteReader();
-                        reader.Read();
+                        int read = 0;
+                        MySqlDataReader reader = null;
+                        while (read == 0)
+                        {
+                            reader = command.ExecuteReader();
+                            reader.Read();
+                        }
                         writeToTag("ASRS_yDesired", (int)reader["bottomsPositionR"]);
                         Console.WriteLine(reader["topsPositionR"]);
                         writeToTag("ASRS_xDesired", (int)reader["bottomsPositionC"]);
