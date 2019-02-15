@@ -105,22 +105,31 @@ namespace FinalProject
                         Console.WriteLine("Connection Success!");
                         MySqlCommand command = conn.CreateCommand();
                         command.CommandText = "select * from orders;";
-                        int read = 0;
+                        bool read = false;
                         MySqlDataReader reader = null;
-                        while (read == 0)
+                        Console.WriteLine("waiting for order....");
+                        while (!read)
                         {
                             reader = command.ExecuteReader();
-                            reader.Read();
+                            read = reader.Read();
+                            if (!read) {
+                                reader.Close();
+                            }
                         }
-                        writeToTag("ASRS_yDesired", (int)reader["bottomsPositionR"]);
-                        Console.WriteLine(reader["topsPositionR"]);
-                        writeToTag("ASRS_xDesired", (int)reader["bottomsPositionC"]);
-                        Console.WriteLine(reader["topsPositionC"]);
-                        Console.WriteLine("Press A to go forward");
-                        while (!(Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.A))
+                        Console.WriteLine("Order found.");
+                        Console.WriteLine("Waiting for ASRS...");
+                        while(readFromTag("ASRS_task") != 0)
                         {
-                            
+
                         }
+                        int yDesired = (int)reader["bottomsPositionR"];
+                        int xDesired = (int)reader["bottomsPositionC"];
+                        writeToTag("ASRS_yDesired", yDesired);
+                        Console.WriteLine("Y:"+yDesired);
+                        writeToTag("ASRS_xDesired", xDesired);
+                        Console.WriteLine("X:"+xDesired);
+                        Console.WriteLine("Cordinates programmed to pickup of bottom.");
+               
                         Console.WriteLine("Going to pickup bottom!");
                         writeToTag("orderAvailable", 1);
                         Console.WriteLine("Waiting for part to be dropped off to press...");
@@ -128,13 +137,19 @@ namespace FinalProject
                         {
                             
                         }
-                        Console.WriteLine("Press A to go forward");
-                        while (!(Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.A))
+                        Console.WriteLine("Waiting for ASRS....");
+                        while (readFromTag("ASRS_task") != 0)
                         {
 
                         }
-                        writeToTag("ASRS_yDesired", (int)reader["topsPositionR"]);
-                        writeToTag("ASRS_xDesired", (int)reader["topsPositionC"]);               
+                        yDesired = (int)reader["topsPositionR"];
+                        xDesired = (int)reader["topsPositionC"];
+                        writeToTag("ASRS_yDesired", yDesired);
+                        Console.WriteLine("Y:" + yDesired);
+                        writeToTag("ASRS_xDesired", xDesired);
+                        Console.WriteLine("X:" + xDesired);
+                        Console.WriteLine("Cordinates for pickup of top have been programmed.");
+                     
                         Console.WriteLine("Going to pickup top!");
                         writeToTag("asrsGrabTop", 2);
                         while (readFromTag("PP_Pickup") == 0)
@@ -143,6 +158,15 @@ namespace FinalProject
                         }
                         writeToTag("asrsGrabTop", 0);
                         writeToTag("orderAvailable", 0);
+                        reader.Close();
+                        command.CommandText = "delete from finalproject.orders where topsPositionR = "+yDesired+" and topsPositionC = "+xDesired+";";
+                        if (command.ExecuteNonQuery() > 0)
+                        {
+                            Console.WriteLine("Order deleted!");
+                        }else
+                        {
+                            Console.WriteLine("Error deleting order!");
+                        }
 
                     }
                     catch (Exception e)
