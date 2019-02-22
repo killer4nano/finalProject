@@ -79,7 +79,7 @@ namespace FinalProject
                     try
                     {
 
-                        conn = new MySqlConnection("server=buildabox.online;user id=faraway;password=killer12;database=finalproject;connection timeout=4;");
+                        conn = new MySqlConnection("server=buildabox.online;user id=faraway;password=Killer12;database=finalproject;connection timeout=4;");
                         conn.Open();
                         Console.WriteLine("Connection Success!");
                         MySqlCommand command = conn.CreateCommand();
@@ -100,7 +100,7 @@ namespace FinalProject
                         while (orderAvailable != 2) {
                             orderAvailable = readFromTag("orderAvailable");
                         }
-                        conn = new MySqlConnection("server=buildabox.online;user id=faraway;password=killer12;database=finalproject;connection timeout=4;");
+                        conn = new MySqlConnection("server=buildabox.online;user id=faraway;password=Killer12;database=finalproject;connection timeout=4;");
                         conn.Open();
                         Console.WriteLine("Connection Success!");
                         MySqlCommand command = conn.CreateCommand();
